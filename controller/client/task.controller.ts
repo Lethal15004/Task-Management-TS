@@ -2,7 +2,13 @@ import { Request,Response } from 'express';//Nhúng kiểu Request và Response 
 import Task from '../../model/task.model';//Nhúng Task từ module task.model
 
 export const index=async(req:Request,res:Response)=>{
-    const tasks = await Task.find({});
+    const find ={
+        deleted: false
+    }
+    if(req.query.status){
+        find['status']=req.query.status;
+    }
+    const tasks = await Task.find(find);
     res.json(tasks);
 }
 export const detail=async(req:Request,res:Response)=>{
