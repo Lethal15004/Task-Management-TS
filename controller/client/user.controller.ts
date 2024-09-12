@@ -63,3 +63,23 @@ export const login =async (req:Request, res:Response)=>{
         })
     }
 }
+
+export const profile= async (req: Request, res: Response) => {
+    try {
+        const token :string = req['user'].token;
+        const user = await User.findOne({
+            token: token,
+            deleted: false
+        }).select('-token -password');
+        res.json({
+            code:200,
+            message: 'Trang cá nhân',
+            user: user
+        })
+    } catch (error) {
+        res.json({
+            code:400,
+            message: 'Not Found'
+        })
+    }
+}

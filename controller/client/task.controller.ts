@@ -32,7 +32,6 @@ export const index=async(req:Request,res:Response)=>{
     }
     pagination['skip']=(pagination.currentPage-1)*pagination['limitItems'];
 
-    console.log(find);
     const tasks = await Task.find(find).limit(pagination['limitItems']).skip(pagination['skip']).sort(sort);
     res.json(tasks);
 }
@@ -64,7 +63,6 @@ export const changeStatus = async (req:Request, res:Response) => {
 }
 
 export const create = async (req: Request, res: Response)=>{
-    // data.createdBy=req.user.id;
     if(req.body.listUser){
         for(const idUser of req.body.listUser){
             try {
@@ -83,6 +81,7 @@ export const create = async (req: Request, res: Response)=>{
             }
         }
     }
+    req.body.createdBy=req['user'].id;
     const newTask= new Task(req.body);
     await newTask.save();
     res.json({
