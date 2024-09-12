@@ -100,3 +100,13 @@ export const edit = async (req: Request, res: Response)=>{
         res.json({message: 'Not Found'});
     }
 }
+
+export const deleteTask = async (req: Request, res: Response)=>{
+    try {
+        const ids : string[]=req.body.ids;
+        await Task.updateMany({_id:{$in:ids}},{deleted:true});
+        res.json({message: 'Xóa công việc thành công'});
+    } catch (error) {
+        res.json({message: 'Not Found'});
+    }
+}
