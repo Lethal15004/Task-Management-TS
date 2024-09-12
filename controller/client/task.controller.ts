@@ -90,3 +90,13 @@ export const create = async (req: Request, res: Response)=>{
         task:newTask
     });
 }
+
+export const edit = async (req: Request, res: Response)=>{
+    try {
+        const id :string =req.params.idTask;
+        await Task.updateOne({_id:id},req.body);
+        res.json({message: 'Thay đổi dữ liệu thành công'});
+    } catch (error) {
+        res.json({message: 'Not Found'});
+    }
+}
