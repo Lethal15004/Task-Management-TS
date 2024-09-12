@@ -2,16 +2,24 @@ import { Request,Response } from 'express';//Nhúng kiểu Request và Response 
 import Task from '../../model/task.model';//Nhúng Task từ module task.model
 
 export const index=async(req:Request,res:Response)=>{
+    //Tim kiếm và lọc
     const find ={
         deleted: false
     }
     if(req.query.status){
         find['status']=req.query.status;
     }
+    if(req.query.keyword){
+        find['title']=new RegExp(`${req.query.keyword}`,'i');
+    }
+
+    //Sắp xếp
     const sort={};
     if(req.query.sortKey && req.query.sortValue){
         sort[`${req.query.sortKey}`]=req.query.sortValue;
     }
+
+    //Phân trang
     const pagination={
         currentPage:1
     }
@@ -23,6 +31,7 @@ export const index=async(req:Request,res:Response)=>{
     }
     pagination['skip']=(pagination.currentPage-1)*pagination['limitItems'];
 
+    console.log(find);
     const tasks = await Task.find(find).limit(pagination['limitItems']).skip(pagination['skip']).sort(sort);
     res.json(tasks);
 }
