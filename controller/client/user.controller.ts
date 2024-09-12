@@ -30,6 +30,36 @@ export const register= async (req: Request, res: Response)=>{
             code:400,
             message:'Thông tin đăng ký không hợp lệ'
         })
+    } 
+}
+
+export const login =async (req:Request, res:Response)=>{
+    if(req.body.email && req.body.password){
+        const userLogin=await User.findOne({
+            email:req.body.email,
+            deleted:false,
+        })
+        if(!userLogin){
+            return res.json({
+                code:401,
+                message:'Tài khoản không tồn tại hoặc đã bị xóa'
+            });
+        }
+        if(userLogin.password !== md5(req.body.password)){
+            return res.json({
+                code:401,
+                message:'Mật khẩu không đúng'
+            });
+        }
+        res.json({
+            code:200,
+            message:'Đăng nhập thành công!',
+            token:userLogin.token
+        })
+    }else{
+        res.json({
+            code:400,
+            message:'Thông tin đăng nhập không hợp lệ'
+        })
     }
-    
 }

@@ -4,5 +4,5 @@ const router : Router = express.Router();
 import * as userController from '../../controller/client/user.controller';
 
 router.post('/register',userController.register);
-
+router.post('/login',userController.login);
 export default router;
