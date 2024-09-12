@@ -1,5 +1,6 @@
 import { Request,Response } from 'express';//Nhúng kiểu Request và Response từ module express
 import Task from '../../model/task.model';//Nhúng Task từ module task.model
+import User from '../../model/user.model';//Nhúng User từ module user.model
 
 export const index=async(req:Request,res:Response)=>{
     //Tim kiếm và lọc
@@ -60,4 +61,32 @@ export const changeStatus = async (req:Request, res:Response) => {
     } catch (error) {
         res.json({message: 'Not Found'});
     }
+}
+
+export const create = async (req: Request, res: Response)=>{
+    // data.createdBy=req.user.id;
+    if(req.body.listUser){
+        for(const idUser of req.body.listUser){
+            try {
+                const user=await User.findOne({_id:idUser});
+                if(!user){
+                    res.json({
+                        code:400,
+                        message:`User không tồn tại`
+                    })
+                }
+            } catch (error) {
+                res.json({
+                    code:400,
+                    message:`User không tồn tại`
+                })
+            }
+        }
+    }
+    const newTask= new Task(req.body);
+    await newTask.save();
+    res.json({
+        message:'Tạo mới công việc thành công',
+        task:newTask
+    });
 }
