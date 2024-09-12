@@ -5,6 +5,11 @@ dotenv.config();//Thêm config cho dotenv
 const app : Express = express();
 const port : number | string = process.env.PORT || 3000;//Cổng mặc định là 3000
 
+//Phần body-parser -> Để lấy dữ liệu từ form và fetch (Quan trọng phải có)
+import bodyParser from 'body-parser';//Nhúng body-parser vào dự án
+app.use(bodyParser.urlencoded({ extended: false }))//Nhận dữ liệu từ form
+app.use(bodyParser.json());//Nhận dữ liệu từ fetch
+
 import connectDatabase from './config/database';//Nhúng database từ module database
 connectDatabase();//Kết nối
 
